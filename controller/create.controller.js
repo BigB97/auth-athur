@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -76,7 +77,7 @@ module.exports = {
   },
 
   get: async (req, res) => {
-    const user = await User.find({});
-    return res.status(200).json({ data: user });
+    const user = await User.findById({ _id: req.user._id });
+    return res.status(200).json({ data: `Hello ${user.firstname} Welcome Back` });
   },
 };
