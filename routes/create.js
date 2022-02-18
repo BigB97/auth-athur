@@ -8,4 +8,6 @@ const auth = require('../middleware/authorise');
 router.post('/register', createCtrl.register);
 router.post('/login', createCtrl.login);
 router.get('/get', auth, createCtrl.get);
+router.post('/request_reset', createCtrl.request_password_reset);
+router.post('/reset_password', createCtrl.reset_password);
 module.exports = router;

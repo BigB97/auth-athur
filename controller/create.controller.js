@@ -2,8 +2,10 @@
 /* eslint-disable no-underscore-dangle */
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const User = require('../models/user.model');
-// const tokenSecretKey = require('crypto').randomBytes(32).toString('hex');
+const Token = require('../models/token.model');
+const Mail = require('../helper/sendMail');
 // console.log({ tokenSecretKey });
 
 module.exports = {
@@ -79,5 +81,61 @@ module.exports = {
   get: async (req, res) => {
     const user = await User.findById({ _id: req.user._id });
     return res.status(200).json({ data: `Hello ${user.firstname} Welcome Back` });
+  },
+  request_password_reset: async (req, res) => {
+    try {
+      const { email } = req.body;
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ result: 'Email Not Found, try to register' });
+      }
+
+      const resetToken = crypto.randomBytes(20).toString('hex');
+      const hash = await bcrypt.hash(resetToken, 10);
+      await Token.create({
+        userId: user._id,
+        token: hash,
+      });
+
+      const url = `http://localhost:3000/reset_password/?userId=${user._id}&resetToken=${resetToken}`;
+
+      // Send Reset Password url to user
+      await Mail(
+        email,
+        'Reset Password',
+        `<a href="${url}">Reset Password</a>`,
+      );
+
+      return res.status(200).json({ result: 'Email Sent' });
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  },
+  reset_password: async (req, res) => {
+    try {
+      const { userId, resetToken, password } = req.body;
+
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ result: 'User Not Found' });
+
+      const token = await Token.findOne({ userId });
+      if (!token) return res.status(404).json({ result: 'Token Not Found' });
+
+      const isValid = await bcrypt.compare(resetToken, token.token);
+      if (!isValid) return res.status(404).json({ result: 'Token Not Valid or Expired' });
+
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      user.password = hashedPassword;
+      await user.save();
+
+      // Delete Token
+      token.remove();
+
+      return res.status(200).json({ result: 'Password Reset Successfully' });
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
   },
 };
