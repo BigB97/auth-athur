@@ -6,6 +6,10 @@ const auth = require('../middleware/authorise');
 const upload = require('../helper/upload');
 
 /* GET home page. */
+router.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 router.post('/register', createCtrl.register);
 router.post('/login', createCtrl.login);
 router.get('/get', auth, createCtrl.get);
