@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const User = require('../models/user.model');
 const Token = require('../models/token.model');
 const Mail = require('../helper/sendMail');
+const console = require('console');
 // console.log({ tokenSecretKey });
 
 module.exports = {
@@ -82,6 +83,7 @@ module.exports = {
     const user = await User.findById({ _id: req.user._id });
     return res.status(200).json({ data: `Hello ${user.firstname} Welcome Back` });
   },
+
   request_password_reset: async (req, res) => {
     try {
       const { email } = req.body;
@@ -111,6 +113,7 @@ module.exports = {
       return res.status(400).json({ message: error.message });
     }
   },
+
   reset_password: async (req, res) => {
     try {
       const { userId, resetToken, password } = req.body;
@@ -138,4 +141,8 @@ module.exports = {
       return res.status(400).json({ message: error.message });
     }
   },
+
+  upload: async (req, res) => {
+    console.log(req.file);
+  }
 };
