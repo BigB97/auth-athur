@@ -1,7 +1,0 @@
-aws_access_key = "AKIAXA76NSHNWPYWLYER"
-aws_secret_key = "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"
-service_name = "483180515803"
-aws_account_id = "auth"
-auth_bucket_name = "auth_bucket_artifact"
-authr_codestar_connection = "arn:aws:codestar-connections:eu-west-2:483180515803:connection/db08f22f-4ec5-477d-ae23-cdcb7e30fd44"
-repo_uri = "483180515803.dkr.ecr.eu-west-2.amazonaws.com/auth"
