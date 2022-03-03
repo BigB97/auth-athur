@@ -1,11 +1,7 @@
 node_modules/ 
 .env
 
-# ./infra/terraform.tfvars
-
 **.terraform*
 *.tfstate
 .env
 
-# *.tfvars
-# !*.auto.tfvars
