@@ -2,15 +2,17 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo start docker..
+      - yum update -y && sudo yum install -y docker
+      - sudo systemctl start docker
+      - sudo systemctl enable docker
+      - sudo systemctl restart docker
       - echo Logging in to Amazon ECR...
       - echo new............
       - aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       # - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   build:
     commands:
-      - echo start docker deamon 
-      - systemctl start docker
-      - service docker start
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
