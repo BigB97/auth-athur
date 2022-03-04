@@ -8,6 +8,9 @@ phases:
       # - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   build:
     commands:
+      - echo start docker deamon 
+      - sudo systemctl start docker
+      - sudo service docker start
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
