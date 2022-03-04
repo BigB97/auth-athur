@@ -2,8 +2,10 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo start docker..
-      - yum install -y docker
+      - echo install docker..
+      # - sudo apt-get update
+      - sudo apt-get install docker-ce docker-ce-cli containerd.io
+      - echo start docker
       - sudo systemctl start docker
       - sudo systemctl enable docker
       - sudo systemctl restart docker
