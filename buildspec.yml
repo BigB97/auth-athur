@@ -3,10 +3,10 @@ phases:
   pre_build:
     commands:
       - echo start docker..
-      - yum update -y && sudo yum install -y docker
-      - sudo systemctl start docker
-      - sudo systemctl enable docker
-      - sudo systemctl restart docker
+      - yum install -y docker
+      - systemctl start docker
+      - systemctl enable docker
+      - systemctl restart docker
       - echo Logging in to Amazon ECR...
       - echo new............
       - aws ecr get-login-password | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
