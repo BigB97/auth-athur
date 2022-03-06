@@ -7,7 +7,7 @@ const upload = require('../helper/upload');
 
 /* GET home page. */
 router.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.status(200).send('Hello World!');
 });
 
 router.post('/register', createCtrl.register);
